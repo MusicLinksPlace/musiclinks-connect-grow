@@ -56,11 +56,8 @@ const Index = () => {
         .from('pre_registrations')
         .insert({
           first_name: data.firstName,
-          last_name: data.lastName,
           email: data.email,
-          profile_type: data.profileType,
-          specialty: data.specialty,
-          message: data.message
+          profile_type: data.profileType
         });
 
       if (error) throw error;
@@ -145,22 +142,13 @@ const Index = () => {
               du secteur musical
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex justify-center">
               <Button 
                 onClick={scrollToForm}
                 className="group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-purple-500/25 animate-glow"
               >
                 Rejoindre la communauté
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              
-              <Button 
-                variant="ghost"
-                className="group text-white border border-white/20 hover:bg-white/10 px-8 py-4 text-lg font-medium rounded-full transition-all duration-300 hover-lift"
-                onClick={scrollToVideo}
-              >
-                <Play className="mr-2 w-5 h-5" />
-                Voir la démo
               </Button>
             </div>
           </div>
@@ -174,38 +162,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
+      {/* Video Section - Moved here */}
+      <section className="py-16 bg-black">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-              <div className="text-4xl mb-4">🔍</div>
-              <h3 className="text-xl font-bold text-white mb-2">Boostez votre visibilité musicale</h3>
-            </div>
-            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-              <div className="text-4xl mb-4">🤝</div>
-              <h3 className="text-xl font-bold text-white mb-2">Trouvez facilement les bons contacts</h3>
-            </div>
-            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.6s'}}>
-              <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-xl font-bold text-white mb-2">Développez vos projets et votre carrière</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Video Section */}
-      <section id="video-section" className="py-20 bg-black">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Découvrez MusicLinks
-            </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              En quelques minutes, comprenez comment nous révolutionnons les connexions musicales
-            </p>
-          </div>
-          
           <div className="max-w-4xl mx-auto">
             <div className="relative group">
               <div 
@@ -229,6 +188,28 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Stats Section */}
+      <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+              <div className="text-4xl mb-4">🔍</div>
+              <h3 className="text-xl font-bold text-white mb-2">Boostez votre visibilité musicale</h3>
+            </div>
+            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+              <div className="text-4xl mb-4">🤝</div>
+              <h3 className="text-xl font-bold text-white mb-2">Trouvez facilement les bons contacts</h3>
+            </div>
+            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+              <div className="text-4xl mb-4">🚀</div>
+              <h3 className="text-xl font-bold text-white mb-2">Développez vos projets et votre carrière</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* Features Section */}
       <section className="py-20 bg-gradient-to-b from-gray-900 to-black">
@@ -300,27 +281,15 @@ const Index = () => {
                 
                 <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-white/10 backdrop-blur-sm">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Input 
-                          {...register("firstName", { required: "Requis" })}
-                          placeholder="Prénom *" 
-                          className="h-12 text-base border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white placeholder:text-gray-400 rounded-xl transition-all duration-300"
-                        />
-                        {errors.firstName && (
-                          <p className="text-sm text-red-400">{errors.firstName.message as string}</p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <Input 
-                          {...register("lastName", { required: "Requis" })}
-                          placeholder="Nom *" 
-                          className="h-12 text-base border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white placeholder:text-gray-400 rounded-xl transition-all duration-300"
-                        />
-                        {errors.lastName && (
-                          <p className="text-sm text-red-400">{errors.lastName.message as string}</p>
-                        )}
-                      </div>
+                    <div className="space-y-2">
+                      <Input 
+                        {...register("firstName", { required: "Requis" })}
+                        placeholder="Nom / Prénom / Nom d'entreprise *" 
+                        className="h-12 text-base border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white placeholder:text-gray-400 rounded-xl transition-all duration-300"
+                      />
+                      {errors.firstName && (
+                        <p className="text-sm text-red-400">{errors.firstName.message as string}</p>
+                      )}
                     </div>
                     
                     <div className="space-y-2">
@@ -356,13 +325,7 @@ const Index = () => {
                       )}
                     </div>
 
-                    <div className="space-y-2">
-                      <Textarea 
-                        {...register("message")}
-                        placeholder="Message (optionnel)" 
-                        className="text-base border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white placeholder:text-gray-400 rounded-xl transition-all duration-300 min-h-[120px] resize-none"
-                      />
-                    </div>
+
 
                     <Button 
                       type="submit" 
