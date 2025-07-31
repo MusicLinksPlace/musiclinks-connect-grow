@@ -179,16 +179,16 @@ const Index = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-              <div className="text-4xl font-bold text-purple-300 mb-2 animate-pulse-glow">500+</div>
-              <div className="text-gray-300">Artistes connectés</div>
+              <div className="text-4xl mb-4">🔍</div>
+              <h3 className="text-xl font-bold text-white mb-2">Gagnez en visibilité</h3>
             </div>
             <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-              <div className="text-4xl font-bold text-blue-300 mb-2 animate-pulse-glow">200+</div>
-              <div className="text-gray-300">Professionnels actifs</div>
+              <div className="text-4xl mb-4">🤝</div>
+              <h3 className="text-xl font-bold text-white mb-2">Trouvez les bons profils</h3>
             </div>
             <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20 backdrop-blur-sm hover-lift animate-fade-in-up" style={{animationDelay: '0.6s'}}>
-              <div className="text-4xl font-bold text-pink-300 mb-2 animate-pulse-glow">1000+</div>
-              <div className="text-gray-300">Connexions créées</div>
+              <div className="text-4xl mb-4">🚀</div>
+              <h3 className="text-xl font-bold text-white mb-2">Développez votre carrière musicale ou votre activité dans le secteur !</h3>
             </div>
           </div>
         </div>
