@@ -13,6 +13,7 @@ const Index = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
+  const [selectedProfileType, setSelectedProfileType] = useState<string>('');
   const { toast } = useToast();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
 
@@ -57,13 +58,15 @@ const Index = () => {
         .insert({
           first_name: data.firstName,
           email: data.email,
-          profile_type: data.profileType
+          profile_type: data.profileType,
+          specialty: data.specialty || null
         });
 
       if (error) throw error;
 
       setIsSubmitted(true);
       reset();
+      setSelectedProfileType('');
       toast({
         title: "Inscription réussie !",
         description: "Nous prendrons contact avec vous prochainement.",
@@ -313,6 +316,7 @@ const Index = () => {
                     <div className="space-y-2">
                       <select 
                         {...register("profileType", { required: "Requis" })}
+                        onChange={(e) => setSelectedProfileType(e.target.value)}
                         className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
                       >
                         <option value="">Type de profil *</option>
@@ -324,6 +328,59 @@ const Index = () => {
                         <p className="text-sm text-red-400">{errors.profileType.message as string}</p>
                       )}
                     </div>
+
+                    {selectedProfileType === 'prestataire' && (
+                      <div className="space-y-2">
+                        <select 
+                          {...register("specialty", { required: "Requis" })}
+                          className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
+                        >
+                          <option value="">Spécialité *</option>
+                          
+                          {/* Professionnels de l'enregistrement */}
+                          <optgroup label="🎤 Professionnels de l'enregistrement">
+                            <option value="studio">Studio</option>
+                            <option value="beatmaker">Beatmaker</option>
+                            <option value="ingenieur_son">Ingénieur du son</option>
+                          </optgroup>
+
+                          {/* Promotion et marketing */}
+                          <optgroup label="📈 Promotion et marketing">
+                            <option value="programmateur_radio">Programmateur radio/playlist</option>
+                            <option value="community_manager">Community manager</option>
+                            <option value="media">Médias</option>
+                          </optgroup>
+
+                          {/* Visuel */}
+                          <optgroup label="🎨 Visuel">
+                            <option value="clipmaker">Clipmaker</option>
+                            <option value="monteur">Monteur</option>
+                            <option value="photographe">Photographe</option>
+                            <option value="graphiste">Graphiste</option>
+                          </optgroup>
+
+                          {/* Distribution */}
+                          <optgroup label="📱 Distribution">
+                            <option value="distributeur_musique">Distributeur de musique</option>
+                          </optgroup>
+
+                          {/* Droits */}
+                          <optgroup label="⚖️ Droits">
+                            <option value="avocat_specialise">Avocat spécialisé</option>
+                          </optgroup>
+
+                          {/* Formation */}
+                          <optgroup label="🎓 Formation">
+                            <option value="coach_vocal">Coach vocal</option>
+                            <option value="ateliers_cours">Ateliers et cours de musique</option>
+                            <option value="choregraphe">Chorégraphe</option>
+                          </optgroup>
+                        </select>
+                        {errors.specialty && (
+                          <p className="text-sm text-red-400">{errors.specialty.message as string}</p>
+                        )}
+                      </div>
+                    )}
 
 
 
