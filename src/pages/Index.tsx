@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Users, Rocket, Mail, Instagram, Facebook, Twitter, CheckCircle, ArrowRight, Play, Star, Zap, Globe, Music, Crown } from "lucide-react";
+import { Search, Users, Rocket, Mail, Instagram, CheckCircle, ArrowRight, Play, Star, Zap, Globe, Crown } from "lucide-react";
 import BlurText from "@/components/BlurText";
 import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +11,7 @@ const Index = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [selectedProfileType, setSelectedProfileType] = useState<string>('');
   const { toast } = useToast();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
@@ -27,7 +26,6 @@ const Index = () => {
 
   const scrollToVideo = () => {
     document.getElementById('video-section')?.scrollIntoView({ behavior: 'smooth' });
-    // Auto-play video after scroll
     setTimeout(() => {
       if (videoRef) {
         videoRef.play().catch(() => {
@@ -42,13 +40,23 @@ const Index = () => {
       try {
         if (videoRef.paused) {
           videoRef.play();
+          setIsVideoPlaying(true);
         } else {
           videoRef.pause();
+          setIsVideoPlaying(false);
         }
       } catch (error) {
         console.log('Video play/pause error:', error);
       }
     }
+  };
+
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true);
+  };
+
+  const handleVideoPause = () => {
+    setIsVideoPlaying(false);
   };
 
   const onSubmit = async (data: any) => {
@@ -145,7 +153,7 @@ const Index = () => {
               du secteur musical
             </p>
             
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-16">
               <Button 
                 onClick={scrollToForm}
                 className="group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-purple-500/25 animate-glow"
@@ -153,6 +161,40 @@ const Index = () => {
                 Rejoindre la communauté
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
+            </div>
+
+            {/* Video inside hero */}
+            <div className="max-w-4xl mx-auto">
+              <div className="relative group">
+                <div 
+                  className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-sm cursor-pointer relative"
+                  onClick={handleVideoClick}
+                >
+                                  <video 
+                  ref={setVideoRef}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                  controls
+                  preload="metadata"
+                  onPlay={handleVideoPlay}
+                  onPause={handleVideoPause}
+                >
+                  <source src="/teaser.mp4" type="video/mp4" />
+                  <p className="p-8 text-center text-gray-400 text-lg">
+                    Votre navigateur ne supporte pas la lecture vidéo.
+                  </p>
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl pointer-events-none"></div>
+                
+                {/* Play Button Overlay */}
+                {!isVideoPlaying && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/30 hover:bg-white/30 transition-all duration-300 group-hover:scale-110">
+                      <Play className="w-12 h-12 text-white ml-1" fill="white" />
+                    </div>
+                  </div>
+                )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -162,33 +204,6 @@ const Index = () => {
           <div className="absolute top-20 left-10 w-4 h-4 bg-purple-400 rounded-full animate-bounce"></div>
           <div className="absolute top-40 right-20 w-3 h-3 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
           <div className="absolute bottom-40 left-20 w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
-        </div>
-      </section>
-
-      {/* Video Section - Moved here */}
-      <section className="py-16 bg-black">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="relative group">
-              <div 
-                className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-sm cursor-pointer relative"
-                onClick={handleVideoClick}
-              >
-                <video 
-                  ref={setVideoRef}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                  controls
-                  preload="metadata"
-                >
-                  <source src="/teaser.mp4" type="video/mp4" />
-                  <p className="p-8 text-center text-gray-400 text-lg">
-                    Votre navigateur ne supporte pas la lecture vidéo.
-                  </p>
-                </video>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl pointer-events-none"></div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -211,8 +226,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-
 
       {/* Features Section */}
       <section className="py-20 bg-gradient-to-b from-gray-900 to-black">
@@ -243,7 +256,7 @@ const Index = () => {
               </div>
               <h3 className="text-2xl font-bold mb-4 text-white">Connexions Qualifiées</h3>
               <p className="text-gray-300 leading-relaxed">
-                Trouvez les bons profils facilement grâce à notre algorithme intelligent et nos filtres de recherche avancés.
+                Connectez-vous avec des professionnels vérifiés et qualifiés du secteur musical pour des collaborations fructueuses.
               </p>
             </div>
             
@@ -251,50 +264,67 @@ const Index = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                 <Rocket className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-white">Carrière Boostée</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white">Croissance Accélérée</h3>
               <p className="text-gray-300 leading-relaxed">
-                Développez votre activité musicale avec des opportunités de collaboration et des projets innovants.
+                Développez votre carrière musicale grâce à des opportunités exclusives et des outils de développement professionnel.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Form Section */}
-      <section id="pre-inscription" className="py-20 bg-gradient-to-b from-black to-gray-900">
+      {/* Pre-inscription Section */}
+      <section id="pre-inscription" className="py-20 bg-black relative z-10">
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center space-x-2 mb-4 text-sm text-purple-300 bg-purple-500/10 border border-purple-500/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                <Crown className="w-4 h-4" />
+                <span>Accès prioritaire</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                <BlurText
+                  text="Rejoignez la liste d'attente"
+                  delay={150}
+                  animateBy="words"
+                  direction="top"
+                  className=""
+                />
+              </h2>
+              <p className="text-xl text-gray-300 mb-8">
+                Soyez parmi les premiers à accéder à la plateforme et bénéficiez d'avantages exclusifs
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-400">
+                <div className="flex items-center justify-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  <span>Accès en avant-première</span>
+                </div>
+                <div className="flex items-center justify-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  <span>Support prioritaire</span>
+                </div>
+                <div className="flex items-center justify-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  <span>Tarifs préférentiels</span>
+                </div>
+              </div>
+            </div>
+
             {!isSubmitted ? (
               <>
-                <div className="text-center mb-12 relative z-20">
-                  <h1 className="text-5xl md:text-6xl font-black mb-6 text-white">
-                    <BlurText
-                      text="Rejoignez la liste d'attente"
-                      delay={100}
-                      animateBy="words"
-                      direction="top"
-                      className=""
-                    />
-                  </h1>
-                  <div className="inline-flex items-center space-x-2 mb-6 text-sm text-purple-300 bg-purple-500/10 border border-purple-500/20 px-4 py-2 rounded-full backdrop-blur-sm">
-                    <Crown className="w-4 h-4" />
-                    <span>Accès prioritaire</span>
-                  </div>
-                </div>
-                
-                <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-white/10 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-white/5 to-white/10 border border-white/20 rounded-3xl p-8 backdrop-blur-sm">
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                       <Input 
                         {...register("firstName", { required: "Requis" })}
-                        placeholder="Nom / Prénom / Nom d'entreprise *" 
-                        className="h-12 text-base border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white placeholder:text-gray-400 rounded-xl transition-all duration-300"
+                        placeholder="Nom / Prénom / Nom d'entreprise *"
+                        className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300"
                       />
                       {errors.firstName && (
                         <p className="text-sm text-red-400">{errors.firstName.message as string}</p>
                       )}
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Input 
                         {...register("email", { 
@@ -304,9 +334,9 @@ const Index = () => {
                             message: "Email invalide"
                           }
                         })}
-                        type="email" 
-                        placeholder="Email *" 
-                        className="h-12 text-base border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white placeholder:text-gray-400 rounded-xl transition-all duration-300"
+                        type="email"
+                        placeholder="Email *"
+                        className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300"
                       />
                       {errors.email && (
                         <p className="text-sm text-red-400">{errors.email.message as string}</p>
@@ -320,9 +350,9 @@ const Index = () => {
                         className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
                       >
                         <option value="">Type de profil *</option>
-                        <option value="artiste">Artiste</option>
-                        <option value="prestataire">Prestataire</option>
-                        <option value="partenaire">Partenaire</option>
+                        <option value="artiste">Artiste / Musicien</option>
+                        <option value="prestataire">Prestataire de services</option>
+                        <option value="partenaire">Partenaire stratégique</option>
                       </select>
                       {errors.profileType && (
                         <p className="text-sm text-red-400">{errors.profileType.message as string}</p>
@@ -336,39 +366,27 @@ const Index = () => {
                           className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
                         >
                           <option value="">Spécialité *</option>
-                          
-                          {/* Professionnels de l'enregistrement */}
-                          <optgroup label="🎤 Professionnels de l'enregistrement">
-                            <option value="studio">Studio</option>
-                            <option value="beatmaker">Beatmaker</option>
+                          {/* Production */}
+                          <optgroup label="🎵 Production">
+                            <option value="producteur">Producteur musical</option>
                             <option value="ingenieur_son">Ingénieur du son</option>
+                            <option value="mixage_mastering">Mixage et mastering</option>
+                            <option value="arrangeur">Arrangeur</option>
                           </optgroup>
-
-                          {/* Promotion et marketing */}
-                          <optgroup label="📈 Promotion et marketing">
-                            <option value="programmateur_radio">Programmateur radio/playlist</option>
-                            <option value="community_manager">Community manager</option>
-                            <option value="media">Médias</option>
-                          </optgroup>
-
-                          {/* Visuel */}
-                          <optgroup label="🎨 Visuel">
-                            <option value="clipmaker">Clipmaker</option>
-                            <option value="monteur">Monteur</option>
+                          {/* Technique */}
+                          <optgroup label="🔧 Technique">
+                            <option value="technicien_son">Technicien son</option>
+                            <option value="lighting">Éclairagiste</option>
+                            <option value="video">Vidéaste</option>
                             <option value="photographe">Photographe</option>
+                          </optgroup>
+                          {/* Communication */}
+                          <optgroup label="📢 Communication">
+                            <option value="communication">Communication / Marketing</option>
+                            <option value="relations_presse">Relations presse</option>
+                            <option value="social_media">Social media manager</option>
                             <option value="graphiste">Graphiste</option>
                           </optgroup>
-
-                          {/* Distribution */}
-                          <optgroup label="📱 Distribution">
-                            <option value="distributeur_musique">Distributeur de musique</option>
-                          </optgroup>
-
-                          {/* Droits */}
-                          <optgroup label="⚖️ Droits">
-                            <option value="avocat_specialise">Avocat spécialisé</option>
-                          </optgroup>
-
                           {/* Formation */}
                           <optgroup label="🎓 Formation">
                             <option value="coach_vocal">Coach vocal</option>
@@ -382,7 +400,21 @@ const Index = () => {
                       </div>
                     )}
 
-
+                    {selectedProfileType === 'partenaire' && (
+                      <div className="space-y-2">
+                        <select 
+                          {...register("specialty", { required: "Requis" })}
+                          className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
+                        >
+                          <option value="">Type de partenaire *</option>
+                          <option value="label_maison_disque">Label ou maison de disque</option>
+                          <option value="manager_directeur">Manager / Directeur artistique</option>
+                        </select>
+                        {errors.specialty && (
+                          <p className="text-sm text-red-400">{errors.specialty.message as string}</p>
+                        )}
+                      </div>
+                    )}
 
                     <Button 
                       type="submit" 
@@ -430,16 +462,16 @@ const Index = () => {
               >
                 <Instagram className="w-4 h-4" />
               </Button>
-                             <Button 
-                 variant="ghost" 
-                 size="sm" 
-                 className="w-10 h-10 p-0 hover:bg-purple-500/20 border border-white/20 hover:border-purple-500/40 transition-all duration-300"
-                 onClick={() => window.open('https://www.tiktok.com/@musiclinksapp', '_blank')}
-               >
-                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                 </svg>
-               </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="w-10 h-10 p-0 hover:bg-purple-500/20 border border-white/20 hover:border-purple-500/40 transition-all duration-300"
+                onClick={() => window.open('https://www.tiktok.com/@musiclinksapp', '_blank')}
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
+              </Button>
             </div>
           </div>
           
