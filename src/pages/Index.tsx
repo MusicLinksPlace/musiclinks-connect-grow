@@ -392,21 +392,22 @@ const Index = () => {
                       </div>
                     )}
 
-                    {selectedProfileType === 'partenaire' && (
-                      <div className="space-y-2">
-                        <select 
-                          {...register("specialty", { required: "Requis" })}
-                          className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
-                        >
-                          <option value="">Type de partenaire *</option>
-                          <option value="label_maison_disque">Label ou maison de disque</option>
-                          <option value="manager_directeur">Manager / Directeur artistique</option>
-                        </select>
-                        {errors.specialty && (
-                          <p className="text-sm text-red-400">{errors.specialty.message as string}</p>
-                        )}
-                      </div>
-                    )}
+                                  {selectedProfileType === 'partenaire' && (
+                <div className="space-y-2">
+                  <select 
+                    {...register("specialty", { required: "Requis" })}
+                    className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
+                  >
+                    <option value="">Type de partenaire *</option>
+                    <option value="label_maison_disque">Label ou maison de disque</option>
+                    <option value="manager">Manager</option>
+                    <option value="directeur_artistique">Directeur artistique</option>
+                  </select>
+                  {errors.specialty && (
+                    <p className="text-sm text-red-400">{errors.specialty.message as string}</p>
+                  )}
+                </div>
+              )}
 
                     <Button 
                       type="submit" 
