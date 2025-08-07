@@ -294,20 +294,6 @@ const Index = () => {
               <p className="text-xl text-gray-300 mb-8">
                 Soyez parmi les premiers à accéder à la plateforme et bénéficiez d'avantages exclusifs
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-400">
-                <div className="flex items-center justify-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>Accès en avant-première</span>
-                </div>
-                <div className="flex items-center justify-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>Support prioritaire</span>
-                </div>
-                <div className="flex items-center justify-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>Tarifs préférentiels</span>
-                </div>
-              </div>
             </div>
 
             {!isSubmitted ? (
@@ -366,31 +352,37 @@ const Index = () => {
                           className="h-12 text-base border border-white/20 bg-white/5 focus:border-purple-500 focus:bg-white/10 text-white rounded-xl transition-all duration-300 w-full px-3"
                         >
                           <option value="">Spécialité *</option>
-                          {/* Production */}
-                          <optgroup label="🎵 Production">
-                            <option value="producteur">Producteur musical</option>
-                            <option value="ingenieur_son">Ingénieur du son</option>
-                            <option value="mixage_mastering">Mixage et mastering</option>
-                            <option value="arrangeur">Arrangeur</option>
+                          {/* Professionnels de l'enregistrement */}
+                          <optgroup label="🎙️ Professionnels de l'enregistrement">
+                            <option value="studios">Studios</option>
+                            <option value="beatmakers">Beatmakers</option>
+                            <option value="ingenieurs_son">Ingénieurs du son</option>
                           </optgroup>
-                          {/* Technique */}
-                          <optgroup label="🔧 Technique">
-                            <option value="technicien_son">Technicien son</option>
-                            <option value="lighting">Éclairagiste</option>
-                            <option value="video">Vidéaste</option>
-                            <option value="photographe">Photographe</option>
+                          {/* Audiovisuel */}
+                          <optgroup label="🎬 Audiovisuel">
+                            <option value="clipmaker">Clipmaker</option>
+                            <option value="monteurs">Monteurs</option>
+                            <option value="photographes">Photographes</option>
+                            <option value="graphistes">Graphistes</option>
                           </optgroup>
-                          {/* Communication */}
-                          <optgroup label="📢 Communication">
-                            <option value="communication">Communication / Marketing</option>
-                            <option value="relations_presse">Relations presse</option>
-                            <option value="social_media">Social media manager</option>
-                            <option value="graphiste">Graphiste</option>
+                          {/* Promotion et marketing */}
+                          <optgroup label="📢 Promotion et marketing">
+                            <option value="medias">Médias</option>
+                            <option value="programmateurs_radio_playlist">Programmateurs de radio/playlist</option>
+                            <option value="community_manager">Community manager</option>
+                          </optgroup>
+                          {/* Distribution */}
+                          <optgroup label="📦 Distribution">
+                            <option value="distributeurs_musique">Distributeurs de musique</option>
+                          </optgroup>
+                          {/* Droits */}
+                          <optgroup label="⚖️ Droits">
+                            <option value="avocats_specialises">Avocats spécialisés</option>
                           </optgroup>
                           {/* Formation */}
                           <optgroup label="🎓 Formation">
                             <option value="coach_vocal">Coach vocal</option>
-                            <option value="ateliers_cours">Ateliers et cours de musique</option>
+                            <option value="ateliers_cours_musique">Ateliers et cours de musique</option>
                             <option value="choregraphe">Chorégraphe</option>
                           </optgroup>
                         </select>
