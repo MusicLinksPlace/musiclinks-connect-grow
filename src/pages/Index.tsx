@@ -62,12 +62,15 @@ const Index = () => {
   const onSubmit = async (data: any) => {
     try {
       const { error } = await (supabase as any)
-        .from('pre_registrations')
+        .from('email_signups')
         .insert({
-          first_name: data.firstName,
           email: data.email,
-          profile_type: data.profileType,
-          specialty: data.specialty || null
+          source: 'landing-pre-inscription',
+          metadata: {
+            first_name: data.firstName,
+            profile_type: data.profileType,
+            specialty: data.specialty || null,
+          },
         });
 
       if (error) throw error;
