@@ -3,10 +3,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-function requiredEnv(name: string): string {
-  const v = process.env[name];
-  if (!v) throw new Error(`Missing env var ${name}`);
-  return v;
+function getEnv(name: string): string {
+  const fromProcess = process.env[name];
+  const fromImportMeta = (import.meta as any)?.env?.[name];
+  const value = fromProcess || fromImportMeta;
+
+  if (!value) {
+    throw new Error(`Missing env var ${name}`);
+  }
+
+  return value;
 }
 
 function supabaseRestUrl(supabaseUrl: string) {
@@ -15,8 +21,8 @@ function supabaseRestUrl(supabaseUrl: string) {
 
 describe("email signup", () => {
   test("POST inserts an email into Supabase", async () => {
-    const supabaseUrl = requiredEnv("VITE_SUPABASE_URL");
-    const anonKey = requiredEnv("VITE_SUPABASE_ANON_KEY");
+    const supabaseUrl = getEnv("VITE_SUPABASE_URL");
+    const anonKey = getEnv("VITE_SUPABASE_ANON_KEY");
 
     const timestamp = Date.now();
     const email = `test+${timestamp}@test.com`;
