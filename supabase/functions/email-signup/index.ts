@@ -44,6 +44,8 @@ Deno.serve(async (req) => {
 
   const source = payload.source === undefined ? null : (payload.source ?? "").toString();
   const metadata = isRecord(payload.metadata) ? payload.metadata : null;
+  const cleanupAfter =
+    req.headers.get("x-test-cleanup") === "true" || source === "automated-test";
 
   const res = await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/email_signups`, {
     method: "POST",
@@ -67,6 +69,20 @@ Deno.serve(async (req) => {
     insertedEmail = (arr?.[0]?.email ?? null) as string | null;
   } catch {
     // ignore
+  }
+
+  if (cleanupAfter) {
+    // Best-effort cleanup: keep the table clean after automated tests.
+    await fetch(
+      `${supabaseUrl.replace(/\/$/, "")}/rest/v1/email_signups?email=eq.${encodeURIComponent(email)}`,
+      {
+        method: "DELETE",
+        headers: {
+          apikey: serviceRoleKey,
+          Authorization: `Bearer ${serviceRoleKey}`,
+        },
+      },
+    );
   }
 
   return json(200, { ok: true, email: insertedEmail ?? email });

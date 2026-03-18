@@ -33,6 +33,7 @@ describe("email signup", () => {
         apikey: anonKey,
         Authorization: `Bearer ${anonKey}`,
         "Content-Type": "application/json",
+        "x-test-cleanup": "true",
       },
       body: JSON.stringify({
         email,
