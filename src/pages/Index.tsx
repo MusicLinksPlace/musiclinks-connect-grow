@@ -20,6 +20,20 @@ const Index = () => {
     setIsVisible(true);
   }, []);
 
+  useEffect(() => {
+    if (!videoRef) return;
+
+    videoRef.muted = false;
+    videoRef.volume = 1;
+    videoRef.play().catch(() => {
+      // Fallback to muted autoplay when browsers block playback with sound.
+      videoRef.muted = true;
+      videoRef.play().catch(() => {
+        // Some browsers can still block playback despite autoplay hints.
+      });
+    });
+  }, [videoRef]);
+
   const scrollToForm = () => {
     document.getElementById('pre-inscription')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -39,6 +53,7 @@ const Index = () => {
     if (videoRef) {
       try {
         if (videoRef.paused) {
+          videoRef.muted = false;
           videoRef.play();
           setIsVideoPlaying(true);
         } else {
@@ -167,16 +182,18 @@ const Index = () => {
             </div>
 
             {/* Video inside hero */}
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-3xl md:max-w-4xl mx-auto">
               <div className="relative group">
                 <div 
                   className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-sm cursor-pointer relative"
                   onClick={handleVideoClick}
                 >
-                                  <video 
+                <video 
                   ref={setVideoRef}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                  autoPlay
                   controls
+                  playsInline
                   preload="metadata"
                   onPlay={handleVideoPlay}
                   onPause={handleVideoPause}
@@ -231,9 +248,9 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-900 to-black">
+      <section className="pt-1 md:pt-12 pb-20 bg-gradient-to-b from-gray-900 to-black">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-3 md:mb-10">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               Pourquoi MusicLinks ?
             </h2>
